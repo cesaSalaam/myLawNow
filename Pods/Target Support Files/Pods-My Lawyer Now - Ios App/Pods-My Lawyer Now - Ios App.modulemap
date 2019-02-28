@@ -1,0 +1,6 @@
+framework module Pods_My_Lawyer_Now___Ios_App {
+  umbrella header "Pods-My Lawyer Now - Ios App-umbrella.h"
+
+  export *
+  module * { export * }
+}

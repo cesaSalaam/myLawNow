@@ -41,5 +41,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To speak to people</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We will only use your camera so that you can see people.</string>
 </dict>
 </plist>
