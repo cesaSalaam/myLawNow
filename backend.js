@@ -7,7 +7,7 @@
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
-    const port = 5000;
+    //const port = 5000;
 
 app.get('/verify/sms', function(req, res) {
     //This end points returns and 4 digit code. Right now it's letters and numbers.
@@ -65,7 +65,7 @@ app.get('/verify/sms', function(req, res) {
           res.send("<b>THE SERVER IS RUNNING</b>");
 });
 
-app.listen(port, () => {
+/*app.listen(port, () => {
   console.log(`Server running at http://${port}/`);
-});
+});*/
 module.exports = app;
