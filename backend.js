@@ -7,7 +7,7 @@
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
-    const port = 3000;
+    const port = 5000;
 
 app.get('/verify/sms', function(req, res) {
     //This end points returns and 4 digit code. Right now it's letters and numbers.
