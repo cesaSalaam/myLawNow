@@ -1,5 +1,4 @@
 // server.js
-
     // set up ========================
     var express  = require('express');
     var app      = express();
@@ -8,7 +7,6 @@
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
-    const hostname = '127.0.0.1';
     const port = 3000;
 
 app.get('/verify/sms', function(req, res) {
@@ -67,6 +65,7 @@ app.get('/verify/sms', function(req, res) {
           res.send("<b>THE SERVER IS RUNNING</b>");
 });
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(port, () => {
+  console.log(`Server running at http://${port}/`);
 });
+module.exports = app;
