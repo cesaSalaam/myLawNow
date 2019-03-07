@@ -64,9 +64,6 @@ app.get('/call/room', function(req, res) {
     //This end points returns and 4 digit code. Right now it's letters and numbers.
     //Example of how to hit this endpoint http://localhost:8100/call/room?number=GruveoRocks
 
-    var stringGen = function(len)
-    {
-
     console.log(req.query);
 
     if(req.query.id){
@@ -101,7 +98,8 @@ app.get('/call/room', function(req, res) {
 
 });
 
- app.get('/*', function(req, res) { //route all other  requests here
+
+app.get('/*', function(req, res) { //route all other  requests here
           res.status(200);
           res.send("<b>THE SERVER IS RUNNING</b>");
 }).listen(app.get('port'), function() {
