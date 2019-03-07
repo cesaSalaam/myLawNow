@@ -85,7 +85,6 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
                 print(error!)
                 return
             }
-            self.callClient()
             // make sure we got data
             /*guard let responseData = data else {
                 print("Error: did not receive data")
@@ -104,12 +103,14 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
             }*/
         }
         task.resume()
+        self.callClient()
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         GruveoCallManager.setDelegate(self)
+        
         self.clientNumber.delegate = self
         
         //init toolbar
@@ -134,7 +135,11 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
     
     func request(toSignApiAuthToken token: String!) {
         var request: NSMutableURLRequest? = nil
-        if let url = URL(string: "https://api-demo.gruveo.com/signer") {
+        
+        /*if let url = URL(string: "https://api-demo.gruveo.com/signer") {
+            request = NSMutableURLRequest(url: url)
+        }*/
+        if let url = URL(string: "http://mylawnow.herokuapp.com/signer") {
             request = NSMutableURLRequest(url: url)
         }
         request?.httpMethod = "POST"

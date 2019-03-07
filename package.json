@@ -10,6 +10,9 @@
   "author": "cesa salaam",
   "license": "ISC",
   "dependencies": {
+    "base-64": "^0.1.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^4.16.4",
     "twilio": "^3.28.1"
   }

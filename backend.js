@@ -4,10 +4,11 @@
     var app      = express();
     var accountSid = 'AC5334081dfb4c5325ae73834f63186332'; //This are found in the twilio account. Becareful to never upload these keys to github.
     var authToken = 'ed09956518657bf159211bcc0ff0c0d0';
+    const crypto = require('crypto');
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
-  app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 5000));
 
 app.get('/verify/sms', function(req, res) {
     //This end points returns and 4 digit code. Right now it's letters and numbers.
@@ -93,6 +94,14 @@ app.get('/call/room', function(req, res) {
     res.send("BAD REQUEST");
     console.log("this is a params err");
   }
+});
+
+app.post('/signer', function (req, res) {
+  var token = req.body.token
+  req
+    .pipe(crypto.createHmac('sha256',secret))
+    .pipe(base64.encode())
+    .pipe(res.set('Content-Type', 'text/plain'));
 });
 
 app.get('/*', function(req, res) { //route all other  requests here
