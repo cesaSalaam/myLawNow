@@ -5,6 +5,7 @@
     var accountSid = 'AC5334081dfb4c5325ae73834f63186332'; //This are found in the twilio account. Becareful to never upload these keys to github.
     var authToken = 'ed09956518657bf159211bcc0ff0c0d0';
     const crypto = require('crypto');
+    const base64 = require('base-64');
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
@@ -97,7 +98,7 @@ app.get('/call/room', function(req, res) {
 });
 
 app.all('/signer', function (req, res) {
-  var token = req.body.token
+  console.log(req.body);
   req
     .pipe(crypto.createHmac('sha256',"PcMDUu8hYLMsDeDhHUJtHahh"))
     .pipe(base64.encode())
