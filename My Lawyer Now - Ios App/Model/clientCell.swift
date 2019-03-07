@@ -7,9 +7,9 @@
 //
 
 import UIKit
+import GruveoSDK
 
-class clientCell: UITableViewCell {
-
+class clientCell: UITableViewCell{
     @IBOutlet weak var clientName: UILabel!
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

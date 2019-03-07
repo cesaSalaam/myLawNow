@@ -11,10 +11,12 @@ import FirebaseAuth
 import  FirebaseDatabase
 class addClientController: UIViewController {
 
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var address: UITextField!
     @IBOutlet weak var number: UITextField!
     @IBOutlet weak var name: UITextField!
+    
     @IBAction func addClient(_ sender: Any) {
         
         if (address.text == "") || (name.text == "") || (number.text == ""){
@@ -45,6 +47,50 @@ class addClientController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.name.useUnderline()
+        self.number.useUnderline()
+        self.address.useUnderline()
+        self.email.useUnderline()
+        self.registerKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.unregisterKeyboardNotifications()
+    }
+    
+    func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(addClientController.keyboardDidShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addClientController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func unregisterKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    
+    @objc func keyboardDidShow(notification: NSNotification) {
+        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardInfo = userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue
+        let keyboardSize = keyboardInfo.cgRectValue.size
+        
+        // Get the existing contentInset for the scrollView and set the bottom property to be the height of the keyboard
+        var contentInset = self.scrollView.contentInset
+        contentInset.bottom = keyboardSize.height
+        
+        self.scrollView.contentInset = contentInset
+        self.scrollView.scrollIndicatorInsets = contentInset
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        var contentInset = self.scrollView.contentInset
+        contentInset.bottom = 0
+        
+        self.scrollView.contentInset = contentInset
+        self.scrollView.scrollIndicatorInsets = UIEdgeInsets.zero
+    }
 
     /*
     // MARK: - Navigation

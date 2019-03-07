@@ -12,13 +12,19 @@ import Firebase
 class StartViewController: UIViewController {
     
     var handle: AuthStateDidChangeListenerHandle?
+    @IBOutlet weak var loginButton: UIButton!
     
+    @IBOutlet weak var signUpButton: UIButton!
     override func viewWillAppear(_ animated: Bool) {
-        /*do {
-            try Auth.auth().signOut()
-        } catch let signOutError as NSError {
-            print ("Error signing out: %@", signOutError)
-        }*/
+        
+        loginButton.layer.cornerRadius = 3.0
+        loginButton.layer.borderWidth = 1.0
+        loginButton.layer.borderColor = hexStringToUIColor(hex: "0474bc").cgColor
+        
+        signUpButton.layer.cornerRadius = 3.0
+        signUpButton.layer.borderWidth = 1.0
+        signUpButton.layer.borderColor = hexStringToUIColor(hex: "0474bc").cgColor
+        
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             // [START_EXCLUDE]
             if user != nil{
@@ -37,7 +43,30 @@ class StartViewController: UIViewController {
         
         // Do any additional setup after loading the view.
     }
+    
 
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
     /*
     // MARK: - Navigation
 

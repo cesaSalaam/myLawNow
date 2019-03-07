@@ -19,5 +19,4 @@ class Client: NSObject {
         return ["name": self.name!, "phoneNumber" : self.phoneNumber!, "address" : self.address!, "lawyerId" : self.lawyerId!, "email" : self.email!]
     }
     
-    
 }

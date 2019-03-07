@@ -45,5 +45,10 @@
 	<string>To speak to people</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We will only use your camera so that you can see people.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

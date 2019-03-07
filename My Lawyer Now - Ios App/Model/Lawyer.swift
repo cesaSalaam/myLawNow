@@ -29,4 +29,14 @@ class Lawyer: NSObject {
         return ["name":self.name! , "lawFirm":self.lawFirm! , "email": self.email! , "phoneNumber" : self.phoneNumber! ]
     }
     
+    init(name: String, phoneNumber: String, email: String, lawFirm: String){
+        self.name = name
+        self.email = email
+        self.phoneNumber = phoneNumber
+        self.lawFirm = lawFirm
+    }
+    override init() {
+        
+    }
+    
 }

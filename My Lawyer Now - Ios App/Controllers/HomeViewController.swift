@@ -21,12 +21,13 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         getClients()
         super.viewDidLoad()
-    }
-    @IBAction func callClient(_ sender: Any) {
-        print("calling client")
+        tableView.tableFooterView = UIView()
+        
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.selectedIndex = 1
+    }
     // MARK - Table View
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listOfClients.count
@@ -56,7 +57,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.listOfClients = tempList
             self.tableView.reloadData()
         }
-        //print(fireServices.FIRBase.getClients().count)
     }
     
     
@@ -64,8 +64,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
     }
     
 

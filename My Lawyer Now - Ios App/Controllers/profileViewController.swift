@@ -7,13 +7,17 @@
 //
 
 import UIKit
-
+import FirebaseAuth
 class profileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
     @IBOutlet weak var tableView: UITableView!
     
     
     var arrayOfSettings = ["My Info","Clear Call History","Account", "About", "Legal"]
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.tableFooterView = UIView()
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrayOfSettings.count
@@ -31,6 +35,16 @@ class profileViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
     }
     
+    @IBAction func loginOut(_ sender: Any) {
+        do {
+            try Auth.auth().signOut()
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewController(withIdentifier: "NavController")
+            self.present(controller, animated: true, completion: nil)
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+    }
     
     
     @objc func addingClient(){
@@ -38,8 +52,10 @@ class profileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewWillLayoutSubviews() {
-        //profileImage.layer.cornerRadius = profileImage.frame.height / 2.0
-       // profileImage.clipsToBounds = true
+        //self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
+       // self.profileImageView.clipsToBounds = true
+        profileImage.layer.cornerRadius = 10
+       profileImage.clipsToBounds = true
     }
     
 
