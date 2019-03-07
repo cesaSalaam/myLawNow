@@ -6,6 +6,7 @@
     var authToken = 'ed09956518657bf159211bcc0ff0c0d0';
     const crypto = require('crypto');
     const base64 = require('base-64');
+    var str = require('string-to-stream')
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
@@ -97,13 +98,30 @@ app.get('/call/room', function(req, res) {
   }
 });
 
-app.all('/signer', function (req, res) {
-  console.log(req.body);
-  req
-    .pipe(crypto.createHmac('sha256',"PcMDUu8hYLMsDeDhHUJtHahh"))
-    .pipe(base64.encode())
-    .pipe(res.set('Content-Type', 'text/plain'));
+app.get('/signer', function (req, res) {
+
+// Method 1 - Writing to a stream
+let hmac = crypto.createHmac("sha256", "PcMDUu8hYLMsDeDhHUJtHahh");
+hmac.write(req.query.token); // write in to the stream
+hmac.end(); // can't read from the stream until you call end()
+let hash = hmac.read().toString('base64'); // read out hmac digest
+
+console.log(hash);
+res.status(200);
+res.send({result:hash});
+
 });
+/*app.get('/signer', function (req, res) {
+  console.log(req.query.token);
+
+  let result = str(req.query.token)
+    .pipe(crypto.createHmac('sha256',"PcMDUu8hYLMsDeDhHUJtHahh")).digest("base64");
+    //.pipe(base64.encode())
+    //.pipe(res.set('Content-Type', 'text/plain'));
+    console.log(result);
+    res.status(200);
+    res.send({result:result});
+});*/
 
 app.get('/*', function(req, res) { //route all other  requests here
           res.status(200);

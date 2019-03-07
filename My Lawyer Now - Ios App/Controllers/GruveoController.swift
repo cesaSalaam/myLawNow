@@ -68,7 +68,7 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         task.resume()*/
         
         
-        let URL = NSURL(string: "http://mylawnow.herokuapp.com/call/room?id=\(input)")!
+       /* let URL = NSURL(string: "http://mylawnow.herokuapp.com/call/room?id=\(input)")!
         
         let urlRequest = URLRequest(url: URL as URL)
         
@@ -102,7 +102,7 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
                 return
             }*/
         }
-        task.resume()
+        task.resume()*/
         self.callClient()
     }
     
@@ -134,17 +134,24 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
     }
     
     func request(toSignApiAuthToken token: String!) {
+        print(token!)
         var request: NSMutableURLRequest? = nil
         
-        /*if let url = URL(string: "https://api-demo.gruveo.com/signer") {
-            request = NSMutableURLRequest(url: url)
-        }*/
-        if let url = URL(string: "http://mylawnow.herokuapp.com/signer") {
+        if let url = URL(string: "https://api-demo.gruveo.com/signer?token=\(token!)") {
             request = NSMutableURLRequest(url: url)
         }
-        request?.httpMethod = "POST"
-        request?.setValue("text/plain", forHTTPHeaderField: "Content-Type")
-        request?.httpBody = token.data(using: .utf8)
+        /*if let url = URL(string: "http://localhost:5000/signer?token=\(token!)") {
+            request = NSMutableURLRequest(url: url)
+        }*/
+        request?.httpMethod = "GET"
+        request?.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        //let json: [String: Any] = ["token" : token]
+        
+        //let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        
+        //request?.httpBody = jsonData
+        
         
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
@@ -153,11 +160,17 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         if let request = request {
             (session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
                 if (data != nil) {
-                    var signedToken: String? = nil
+                    if let json = (try? JSONSerialization.jsonObject(with: data!, options: [])) as? [String:Any]{
+                        print(json["result"]!)
+                        //var signedToken = json["result"] //String(data: data, encoding: .utf8)
+                        
+                        GruveoCallManager.authorize(json["result"]! as? String)
+                    }
+                    /*(var signedToken: String? = nil
                     if let data = data {
                         signedToken = String(data: data, encoding: .utf8)
                     }
-                    GruveoCallManager.authorize(signedToken)
+                    GruveoCallManager.authorize(json["result"]!)*/
                 } else {
                     GruveoCallManager.authorize(nil)
                 }
@@ -167,9 +180,9 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
     
     
     func callClient(){
-        GruveoCallManager.callCode("gruveorocks", videoCall: true, textChat: false, on: self) { (creationError) in
+        GruveoCallManager.callCode("cesaroom", videoCall: true, textChat: false, on: self) { (creationError) in
             if Int(creationError.rawValue) != 0{
-                print("cool")
+                print(creationError.rawValue)
             }
         }
     }
