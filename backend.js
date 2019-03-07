@@ -96,10 +96,10 @@ app.get('/call/room', function(req, res) {
   }
 });
 
-app.post('/signer', function (req, res) {
+app.all('/signer', function (req, res) {
   var token = req.body.token
   req
-    .pipe(crypto.createHmac('sha256',secret))
+    .pipe(crypto.createHmac('sha256',"PcMDUu8hYLMsDeDhHUJtHahh"))
     .pipe(base64.encode())
     .pipe(res.set('Content-Type', 'text/plain'));
 });
