@@ -67,9 +67,9 @@ app.get('/call/room', function(req, res) {
     if(req.query.id){
 
       twilio.messages.create({
-      to: "+12025538298",
+      to: req.query.id,
       from: "+12027938486",
-      body: "Your MyLawNow meeting link: grv.to/"+req.query.id + " Please call in now."
+      body: "Your MyLawNow meeting link: grv.to/gruveorocks Please call in now."
     }, function(err, message) {
 
     if(err){
