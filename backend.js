@@ -63,16 +63,16 @@ app.get('/verify/sms', function(req, res) {
 });
 
 app.get('/call/room', function(req, res) {
-    //This end points returns and 4 digit code. Right now it's letters and numbers.
+    //This end point returns a 4 digit code. Right now it's letters and numbers.
     //Example of how to hit this endpoint http://localhost:8100/call/room?number=GruveoRocks
     console.log(req.query);
 
-    if(req.query.id){
+    if(req.query){
 
       twilio.messages.create({
-      to: req.query.id,
+      to: req.query.number,
       from: "+12027938486",
-      body: "Your MyLawNow meeting link: grv.to/gruveorocks Please call in now."
+      body: "Your MyLawNow meeting link: "+ "www.test.com/"+ req.query.id + " Please call in now."
     }, function(err, message) {
 
     if(err){

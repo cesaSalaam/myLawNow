@@ -11,12 +11,14 @@ import UIKit
 class emailSignup: UIViewController {
 
     var name: String?
+    // MARK: - IBAction
     
     @IBOutlet weak var email: UITextField!
     override func viewWillAppear(_ animated: Bool) {
         self.email.useUnderline()
         print(name!)
     }
+    
     
     @IBAction func nextClicked(_ sender: Any) {
         if (email.text?.isValidEmail())!{

@@ -16,24 +16,29 @@ class phoneNumberController: UIViewController {
     var password: String?
     var lawFirm: String?
     var templawyer: Lawyer?
+    var pin: String?
+    
     @IBOutlet weak var phoneNumber: UITextField!
     var refLawyers: DatabaseReference!
     
     override func viewWillAppear(_ animated: Bool) {
-        print(name)
-        print(email)
-        print(password)
-        print(lawFirm)
-        
-        
         self.phoneNumber.useUnderline()
         templawyer = Lawyer(name: name!,phoneNumber: phoneNumber.text!,email: email!,lawFirm: lawFirm!)
-        refLawyers = Database.database().reference().child("Lawyers")
-        print(templawyer?.convertToDict())
     }
     
     @IBAction func signUpClicked(_ sender: Any) {
-        print((templawyer?.email)!)
+        if (phoneNumber.text?.count)! < 10{
+            let alert = UIAlertController(title: "Oh no!", message: "seems like thats not a phone number" , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            verifyCode(input: phoneNumber.text!, completionHandler: {
+                print("performing")
+                self.performSegue(withIdentifier: "toVerify", sender: nil)
+            })
+        }
+        
+        /*print((templawyer?.email)!)
         Auth.auth().createUser(withEmail: (templawyer?.email)!, password: password!) { (authResult, error) in
             if let err = error{
                 print(err.localizedDescription)
@@ -49,9 +54,7 @@ class phoneNumberController: UIViewController {
                         print(err.localizedDescription)
                     } else{
                         print("well done")
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let controller = storyboard.instantiateViewController(withIdentifier: "homeController")
-                        self?.present(controller, animated: true, completion: nil)
+
                     }
                 }
                 let lawObject = self.templawyer!.convertToDict()
@@ -66,13 +69,17 @@ class phoneNumberController: UIViewController {
                 })
                 
             }
-        }
+        }*/
         
     }
     
-    func performAction(input: String) {
+    func verifyCode(input: String, completionHandler: @escaping ()->Void){
+        var number = input
         
-        let URL = NSURL(string: "http://mylawnow.herokuapp.com/verify/sms?number=\(input)")!
+        number = number.replacingOccurrences(of: " ", with: "")
+        number = number.replacingOccurrences(of: "-", with: "")
+        
+        let URL = NSURL(string: "http://mylawnow.herokuapp.com/verify/sms?number=\(number)")!
         
         let urlRequest = URLRequest(url: URL as URL)
         
@@ -85,8 +92,6 @@ class phoneNumberController: UIViewController {
             (data, response, error) in
             // check for any errors
             guard error == nil else {
-                print("error calling GET on /todos/1")
-                print(error!)
                 return
             }
             // make sure we got data
@@ -97,9 +102,14 @@ class phoneNumberController: UIViewController {
             // parse the result as JSON, since that's what the API provides
             do {
                 guard let link = try JSONSerialization.jsonObject(with: responseData, options: [])
-                    as? [String: Any] else {
+                    as? [String: String] else {
                         print("error trying to convert data to JSON")
                         return
+                }
+                print("code: " + link["code"]!)
+                self.pin = link["code"]!
+                DispatchQueue.main.async {
+                    completionHandler()
                 }
             } catch  {
                 print("error trying to convert data to JSON")
@@ -108,16 +118,15 @@ class phoneNumberController: UIViewController {
         }
         task.resume()
     }
-    
-
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        let controller = segue.destination as! verifyPinController
+        controller.securePin = self.pin!
+        controller.tempLawyer = self.templawyer!
+        controller.password = self.password!
     }
-    */
+    
 
 }

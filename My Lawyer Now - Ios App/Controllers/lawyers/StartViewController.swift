@@ -25,17 +25,6 @@ class StartViewController: UIViewController {
         signUpButton.layer.borderWidth = 1.0
         signUpButton.layer.borderColor = hexStringToUIColor(hex: "0474bc").cgColor
         
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            // [START_EXCLUDE]
-            if user != nil{
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let controller = storyboard.instantiateViewController(withIdentifier: "homeController")
-                self.present(controller, animated: true, completion: nil)
-            } else {
-                print("user not already logged in. Staying here.")
-            }
-            // [END_EXCLUDE]
-        }
     }
     
     override func viewDidLoad() {

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import FirebaseAuth
 class passwordController: UIViewController {
     var name: String?
     var email: String?
@@ -16,9 +16,6 @@ class passwordController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.password.useUnderline()
-        print(name)
-        print(email)
-        
     }
     
     @IBAction func nextClick(_ sender: Any) {
@@ -27,9 +24,11 @@ class passwordController: UIViewController {
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }else{
+            print("here i am")
             self.performSegue(withIdentifier: "toFirm", sender: nil)
+            }
+        
         }
-    }
     
     
     // MARK: - Navigation

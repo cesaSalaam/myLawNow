@@ -52,10 +52,8 @@ class profileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewWillLayoutSubviews() {
-        //self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
-       // self.profileImageView.clipsToBounds = true
         profileImage.layer.cornerRadius = 10
-       profileImage.clipsToBounds = true
+        profileImage.clipsToBounds = true
     }
     
 

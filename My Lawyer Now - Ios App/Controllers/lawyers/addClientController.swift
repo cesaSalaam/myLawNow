@@ -17,6 +17,11 @@ class addClientController: UIViewController {
     @IBOutlet weak var number: UITextField!
     @IBOutlet weak var name: UITextField!
     
+    @IBAction func cancel(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "homeController")
+        self.present(controller, animated: true, completion: nil)
+    }
     @IBAction func addClient(_ sender: Any) {
         
         if (address.text == "") || (name.text == "") || (number.text == ""){

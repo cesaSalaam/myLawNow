@@ -9,14 +9,18 @@
 import UIKit
 import Firebase
 import GruveoSDK
+import StoreKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        //SubscriptionService.shared.loadSubscriptionOptions()
+        SKPaymentQueue.default().add(self)
+        
         FirebaseApp.configure()
         GruveoCallManager.setClientId("TZ5h4DMU6Uw7")
         
@@ -55,3 +59,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension AppDelegate: SKPaymentTransactionObserver {
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction in transactions {
+            switch transaction.transactionState {
+            case .failed:
+                queue.finishTransaction(transaction)
+                print("Transaction Failed \(transaction)")
+            case .purchased, .restored:
+                queue.finishTransaction(transaction)
+                print("Transaction purchased or restored: \(transaction)")
+            case .deferred, .purchasing:
+                print("Transaction in progress: \(transaction)")
+            }
+        }
+    }
+    
+    func handlePurchasingState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("User is attempting to purchase product id: \(transaction.payment.productIdentifier)")
+    }
+    
+    /*func handlePurchasedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("User purchased product id: \(transaction.payment.productIdentifier)")
+        
+        queue.finishTransaction(transaction)
+        SubscriptionService.shared.uploadReceipt { (success) in
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: SubscriptionService.purchaseSuccessfulNotification, object: nil)
+            }
+        }
+    }*/
+    
+    func handleRestoredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase restored for product id: \(transaction.payment.productIdentifier)")
+    }
+    
+    func handleFailedState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase failed for product id: \(transaction.payment.productIdentifier)")
+    }
+    
+    func handleDeferredState(for transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        print("Purchase deferred for product id: \(transaction.payment.productIdentifier)")
+    }
+}

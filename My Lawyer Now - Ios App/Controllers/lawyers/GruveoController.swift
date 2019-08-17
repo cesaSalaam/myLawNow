@@ -11,6 +11,7 @@ import GruveoSDK
 class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextFieldDelegate{
     
     @IBOutlet weak var clientNumber: UITextField!
+    let room = GruveoCallManager.generateRandomCode()
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
         clientNumber.resignFirstResponder()  //if desired
@@ -27,48 +28,10 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         self.view.endEditing(true)
     }
     
+    
+    
     func performAction(input: String) {
-        
-        /* This is to verify the phone number. Use for the signup process
-         
-         let URL = NSURL(string: "http://mylawnow.herokuapp.com/verify/sms?number=\(input)")!
-        
-        let urlRequest = URLRequest(url: URL as URL)
-        
-        // set up the session
-        let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
-        
-        // make the request
-        let task = session.dataTask(with: urlRequest) {
-            (data, response, error) in
-            // check for any errors
-            guard error == nil else {
-                print("error calling GET on /todos/1")
-                print(error!)
-                return
-            }
-            // make sure we got data
-            guard let responseData = data else {
-                print("Error: did not receive data")
-                return
-            }
-            // parse the result as JSON, since that's what the API provides
-            do {
-                guard let link = try JSONSerialization.jsonObject(with: responseData, options: [])
-                    as? [String: Any] else {
-                        print("error trying to convert data to JSON")
-                        return
-                }
-            } catch  {
-                print("error trying to convert data to JSON")
-                return
-            }
-        }
-        task.resume()*/
-        
-        
-       /* let URL = NSURL(string: "http://mylawnow.herokuapp.com/call/room?id=\(input)")!
+        let URL = NSURL(string: "http://mylawnow.herokuapp.com/call/room?id=\(self.room!)&number=\(input)")!
         
         let urlRequest = URLRequest(url: URL as URL)
         
@@ -102,7 +65,7 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
                 return
             }*/
         }
-        task.resume()*/
+        task.resume()
         self.callClient()
     }
     
@@ -112,6 +75,7 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         GruveoCallManager.setDelegate(self)
         
         self.clientNumber.delegate = self
+    
         
         //init toolbar
         let toolbar:UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: self.view.frame.size.width, height: 30))
@@ -137,7 +101,7 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         print(token!)
         var request: NSMutableURLRequest? = nil
         
-        if let url = URL(string: "https://api-demo.gruveo.com/signer?token=\(token!)") {
+        if let url = URL(string: "http://mylawnow.herokuapp.com/signer?token=\(token!)") {
             request = NSMutableURLRequest(url: url)
         }
         /*if let url = URL(string: "http://localhost:5000/signer?token=\(token!)") {
@@ -146,11 +110,6 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         request?.httpMethod = "GET"
         request?.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        //let json: [String: Any] = ["token" : token]
-        
-        //let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        
-        //request?.httpBody = jsonData
         
         
         let configuration = URLSessionConfiguration.default
@@ -159,12 +118,19 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         
         if let request = request {
             (session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+                if let err = error{
+                    print(err.localizedDescription)
+                }
                 if (data != nil) {
-                    if let json = (try? JSONSerialization.jsonObject(with: data!, options: [])) as? [String:Any]{
-                        print(json["result"]!)
+                    if let json = (try? JSONSerialization.jsonObject(with: data!, options: [])) as? [String:String]{
+                        //print("token:" + json["result"]! as! String )
+                        
+                        let token = json["result"]!
+                        
+                        print("token: \(token)")
                         //var signedToken = json["result"] //String(data: data, encoding: .utf8)
                         
-                        GruveoCallManager.authorize(json["result"]! as? String)
+                        GruveoCallManager.authorize(token)
                     }
                     /*(var signedToken: String? = nil
                     if let data = data {
@@ -180,7 +146,8 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
     
     
     func callClient(){
-        GruveoCallManager.callCode("cesaroom", videoCall: true, textChat: false, on: self) { (creationError) in
+        GruveoCallManager.callCode(room!, videoCall: true, textChat: true, on: self) { (creationError) in
+            print("room: \(self.room!)")
             if Int(creationError.rawValue) != 0{
                 print(creationError.rawValue)
             }

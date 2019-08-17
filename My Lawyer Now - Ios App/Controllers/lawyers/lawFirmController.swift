@@ -17,7 +17,7 @@ class lawFirmController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.lawFirm.useUnderline()
-        print(name)
+        print("name: " + name!)
         print(email)
         print(password)
     }
