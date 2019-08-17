@@ -15,6 +15,10 @@
     app.options('/api/delete/verse', cors());
     app.use(cors());
 
+app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
+
+
+
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/verify/sms', function(req, res) {
