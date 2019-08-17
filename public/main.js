@@ -44,7 +44,7 @@ function onEmbedRequestToSignApiAuthToken(e) {
     // where you pass e.token in the body of a POST request.
 
     $.ajax({
-        url: `http://mylawnow.herokuapp.com/signer?token=${e.token}`,
+        url: `https://mylawnow.herokuapp.com/signer?token=${e.token}`,
         type: 'GET',
         success: function(res) {
             let data = JSON.parse(res);
