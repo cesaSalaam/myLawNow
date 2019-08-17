@@ -104,9 +104,7 @@ class GruveoController: UIViewController, GruveoCallManagerDelegate, UITextField
         if let url = URL(string: "http://mylawnow.herokuapp.com/signer?token=\(token!)") {
             request = NSMutableURLRequest(url: url)
         }
-        /*if let url = URL(string: "http://localhost:5000/signer?token=\(token!)") {
-            request = NSMutableURLRequest(url: url)
-        }*/
+       
         request?.httpMethod = "GET"
         request?.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
