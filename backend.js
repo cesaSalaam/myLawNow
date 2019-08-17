@@ -10,6 +10,11 @@
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
+
+    const cors = require('cors');
+    app.options('/api/delete/verse', cors());
+    app.use(cors());
+
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/verify/sms', function(req, res) {
