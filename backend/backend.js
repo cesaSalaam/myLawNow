@@ -3,8 +3,8 @@
     // set up ========================
     var express  = require('express');
     var app      = express();
-    var accountSid = 'AC5334081dfb4c5325ae73834f63186332'; //This are found in the twilio account. Becareful to never upload these keys to github.
-    var authToken = 'ed09956518657bf159211bcc0ff0c0d0';
+    var accountSid = 'accountSid'; //This are found in the twilio account. Becareful to never upload these keys to github.
+    var authToken = 'authToken';
 //Twilio
     var twilio = require('twilio')(accountSid, authToken);
 
